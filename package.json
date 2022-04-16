@@ -8,7 +8,10 @@
         "start": "node dist/main/api",
         "build": "rimraf dist && tsc -p tsconfig-build.json",
         "lint": "eslint .",
-        "lint:fix": "npm run lint -- --fix"
+        "lint:fix": "npm run lint -- --fix",
+        "test": "jest --passWithNoTests --no-cache --runInBand",
+        "test:watch": "npm test -- --watch",
+        "test:coverage": "npm test -- --coverage"
     },
     "dependencies": {
         "-": "^0.0.1",
@@ -27,5 +30,10 @@
     },
     "engines": {
         "node": "16.x"
+    },
+    "devDependencies": {
+        "@types/jest": "^27.4.1",
+        "jest": "^27.5.1",
+        "ts-jest": "^27.1.4"
     }
 }
