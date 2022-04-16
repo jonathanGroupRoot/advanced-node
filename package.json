@@ -12,7 +12,8 @@
         "test": "jest --passWithNoTests --no-cache --runInBand",
         "test:watch": "npm test -- --watch",
         "test:staged": "npm test -- --findRelatedTests",
-        "test:coverage": "npm test -- --coverage"
+        "test:coverage": "npm test -- --coverage",
+        "prepare": "husky install"
     },
     "dependencies": {
         "-": "^0.0.1",
@@ -35,6 +36,7 @@
     "devDependencies": {
         "@types/jest": "^27.4.1",
         "eslint-staged": "^1.0.1",
+        "husky": "^7.0.4",
         "jest": "^27.5.1",
         "ts-jest": "^27.1.4"
     }
