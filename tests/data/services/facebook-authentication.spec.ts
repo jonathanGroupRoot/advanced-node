@@ -1,5 +1,5 @@
 import { LoadFacebookUserApi } from '@/data/contracts/apis'
-import { LoadUserAccountRepository } from '@/data/contracts/apis/repos'
+import { CreateFacebookAccountRepository, LoadUserAccountRepository } from '@/data/contracts/apis/repos'
 
 import { FacebookAuthenticationService } from '@/data/services'
 
@@ -9,6 +9,7 @@ import { mock, MockProxy } from 'jest-mock-extended'
 describe('FacebookAuthenticationService', () => {
   let loadFacebookUserApi: MockProxy<LoadFacebookUserApi>
   let loadUserAccountRepo: MockProxy<LoadUserAccountRepository>
+  let createFacebookAccountRepo: MockProxy<CreateFacebookAccountRepository>
   let sut: FacebookAuthenticationService
   const token = 'any_token'
 
@@ -20,7 +21,8 @@ describe('FacebookAuthenticationService', () => {
       facebookId: 'any_fb_id'
     })
     loadUserAccountRepo = mock()
-    sut = new FacebookAuthenticationService(loadFacebookUserApi, loadUserAccountRepo)
+    createFacebookAccountRepo = mock()
+    sut = new FacebookAuthenticationService(loadFacebookUserApi, loadUserAccountRepo, createFacebookAccountRepo)
   })
 
   it('should call LoadFacebookUserApi with correct params', async () => {
@@ -38,10 +40,15 @@ describe('FacebookAuthenticationService', () => {
     expect(authResult).toEqual(new AuthenticationError())
   })
 
-  it('should call LoadUserAccountlRepo AuthenticateError when LoadFacebookUserApi returns data', async () => {
+  it('should call CreateUserAccountlRepo when LoadUserAccountRepo returns undefined', async () => {
+    loadUserAccountRepo.load.mockResolvedValueOnce(undefined)
     await sut.perform({ token })
 
-    expect(loadUserAccountRepo.load).toHaveBeenCalledWith({ email: 'any_fb_email' })
-    expect(loadUserAccountRepo.load).toHaveBeenCalledTimes(1)
+    expect(createFacebookAccountRepo.createFromFacebook).toHaveBeenCalledWith({
+      email: 'any_fb_email',
+      name: 'any_fb_name',
+      facebookId: 'any_fb_id'
+    })
+    expect(createFacebookAccountRepo.createFromFacebook).toHaveBeenCalledTimes(1)
   })
 })
